@@ -184,7 +184,7 @@ def main():
             , ["📷 Webcam", "🖼️ Upload Image", "🎥 Upload Video"],
             horizontal=True,label_visibility='hidden')
 
-    # webrtc_ctx = None
+    webrtc_ctx = None
     confidence_threshold = st.sidebar.slider("Confidence Threshold", 0.0, 1.0, 0.4, 0.05)
     nms_threshold = st.sidebar.slider("NMS Threshold", 0.0, 1.0, 0.45, 0.05)
 
@@ -197,7 +197,6 @@ def main():
             video_processor_factory=lambda: processor,
             mode=WebRtcMode.SENDRECV,
             media_stream_constraints={"video": True, "audio": False},
-            # video_frame_callback=processor,
             async_processing=True,
         )
         if webrtc_ctx.video_processor:
