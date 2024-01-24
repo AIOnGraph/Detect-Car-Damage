@@ -199,6 +199,7 @@ def main():
                 mode=WebRtcMode.SENDRECV,
                 media_stream_constraints={"video": True, "audio": False},
                 async_processing=True,
+                video_frame_callback=processor.recv
             )
         except Exception as e:
             st.error(f"An error occurred: {e}")
