@@ -188,6 +188,7 @@ def main():
     confidence_threshold = st.sidebar.slider("Confidence Threshold", 0.0, 1.0, 0.4, 0.05)
     nms_threshold = st.sidebar.slider("NMS Threshold", 0.0, 1.0, 0.45, 0.05)
 
+    rtc_configuration = {"urls": "relay1.expressturn.com:3478", "username": "efPU52K4SLOQ34W2QY", "credential": "efPU52K4SLOQ34W2QY"}
     processor = ObjectDetectionProcessor(confidence_threshold, nms_threshold)
 
     if option == "📷 Webcam":
@@ -198,6 +199,7 @@ def main():
                 video_processor_factory=lambda: processor,
                 mode=WebRtcMode.SENDRECV,
                 media_stream_constraints={"video": True, "audio": False},
+                rtc_configuration=rtc_configuration,
                 async_processing=True,
                 video_frame_callback=processor.recv
             )
