@@ -192,17 +192,24 @@ def main():
 
     if option == "📷 Webcam":
         st.sidebar.write("Using Webcam")
-        webrtc_ctx = webrtc_streamer(
-            key="example",
-            video_processor_factory=lambda: processor,
-            mode=WebRtcMode.SENDRECV,
-            media_stream_constraints={"video": True, "audio": False},
-            async_processing=True,
-        )
-        if webrtc_ctx.video_processor:
-            # print(8888888888888888888888888888888888888888888888888888888888)
+        try:
+            webrtc_ctx = webrtc_streamer(
+                key="example",
+                video_processor_factory=lambda: processor,
+                mode=WebRtcMode.SENDRECV,
+                media_stream_constraints={"video": True, "audio": False},
+                async_processing=True,
+            )
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+        
+        if webrtc_ctx and webrtc_ctx.video_processor:
             webrtc_ctx.video_processor.confidence_threshold = confidence_threshold
             webrtc_ctx.video_processor.nms_threshold = nms_threshold
+            # if webrtc_ctx.video_processor:
+            #     # print(8888888888888888888888888888888888888888888888888888888888)
+            #     webrtc_ctx.video_processor.confidence_threshold = confidence_threshold
+            #     webrtc_ctx.video_processor.nms_threshold = nms_threshold
     elif option == "🖼️ Upload Image":
         uploaded_image = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
         if uploaded_image:
