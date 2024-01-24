@@ -49,6 +49,7 @@ class ObjectDetectionProcessor(VideoProcessorBase):
         blob = cv2.dnn.blobFromImage(input_image, 1/255, (INPUT_WIDTH, INPUT_HEIGHT), [0, 0, 0], 1, crop=False)
         self.net.setInput(blob)
         outputs = self.net.forward(self.net.getUnconnectedOutLayersNames())
+        # print(111111111111111111111111111111111111111111)
         return outputs
 
     def post_process(self, input_image, outputs):
@@ -81,7 +82,7 @@ class ObjectDetectionProcessor(VideoProcessorBase):
                     boxes.append(box)
 
         indices = cv2.dnn.NMSBoxes(boxes, confidences, self.confidence_threshold, self.nms_threshold)
-
+        # print(2222222222222222222222222222222222222222222222222222222222222222222222222222222222)
         for i in indices:
             box = boxes[i]
             left, top, width, height = box
@@ -97,6 +98,7 @@ class ObjectDetectionProcessor(VideoProcessorBase):
     def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
         try:
             frame_np = np.array(frame.to_image())
+            # print(3333333333333333333333333333333333333333333333333333333333333333333333333)
             detections = self.pre_process(frame_np)
             result_frame = self.post_process(frame_np.copy(), detections)
             return av.VideoFrame.from_ndarray(result_frame, format='rgb24')
@@ -184,16 +186,20 @@ def main():
             , ["📷 Webcam", "🖼️ Upload Image", "🎥 Upload Video"],
             horizontal=True,label_visibility='hidden')
 
-    webrtc_ctx = None
+    # webrtc_ctx = None
+    # print(webrtc_ctx,111111111111111111111111111111111111111111111)
     confidence_threshold = st.sidebar.slider("Confidence Threshold", 0.0, 1.0, 0.4, 0.05)
     nms_threshold = st.sidebar.slider("NMS Threshold", 0.0, 1.0, 0.45, 0.05)
 
-    rtc_configuration = {"urls": "relay1.expressturn.com:3478", "username": "efPU52K4SLOQ34W2QY", "credential": "efPU52K4SLOQ34W2QY"}
+
+    rtc_configuration = {"iceServers": [{"urls": "turn:relay1.expressturn.com:3478", "username": "efPU52K4SLOQ34W2QY", "credential": "1TJPNFxHKXrZfelz"}]}
+
     processor = ObjectDetectionProcessor(confidence_threshold, nms_threshold)
 
     if option == "📷 Webcam":
         st.sidebar.write("Using Webcam")
         try:
+            # print(000000000000000000000000000000000000000000000000000000000000000)
             webrtc_ctx = webrtc_streamer(
                 key="example",
                 video_processor_factory=lambda: processor,
@@ -201,14 +207,15 @@ def main():
                 media_stream_constraints={"video": True, "audio": False},
                 rtc_configuration=rtc_configuration,
                 async_processing=True,
-                video_frame_callback=processor.recv
+                # video_frame_callback=processor.recv
             )
+            print(webrtc_ctx,)
         except Exception as e:
             st.error(f"An error occurred: {e}")
-        
         if webrtc_ctx and webrtc_ctx.video_processor:
             webrtc_ctx.video_processor.confidence_threshold = confidence_threshold
             webrtc_ctx.video_processor.nms_threshold = nms_threshold
+            # print(webrtc_ctx.video_processor,4444444444444444444444444444444444444444444444444444444444)
             # if webrtc_ctx.video_processor:
             #     # print(8888888888888888888888888888888888888888888888888888888888)
             #     webrtc_ctx.video_processor.confidence_threshold = confidence_threshold
