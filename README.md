@@ -20,7 +20,7 @@ The project utilizes the following Python libraries:
 - Pillow
 
 ## Files Used
-- **main.py**: Python script containing the main application logic and Streamlit interface.
+- **test2.py**: Python script containing the main application logic and Streamlit interface.
 - **car_damage_model(17 classes).onnx**: Pre-trained object detection model for detecting car damages.
 - **coco.names**: File containing the names of COCO dataset classes used by the model.
 - **requirements.txt**: Text file listing all the Python dependencies required to run the application.
